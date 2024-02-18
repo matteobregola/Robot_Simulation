@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actions Summary</title>
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+<div class="topnav">
+    <a href="/">Actions</a>
+    <a href="/life_stats">Life</a>
+    <a href="/zombies_stats">Zombies</a>
+    <a href="/discovery_stats">Discovery</a>
+</div>
+
+<div class="content">
+    <div><h1>Robert Actions</h1></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <canvas id="myChart" style="flex: 1;  object-fit: contain; align-self: center"></canvas>
+    <script>
+        const xValues = ["WalkToTarget", "WalkDiscover", "Escape", "Discover", "Rest","Collect"];
+        const yValues = {{action_values}};
+        const barColors = ["red", "green","blue","orange","brown","magenta"];
+        new Chart("myChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    display: false,
+                    text: ""
+                },
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

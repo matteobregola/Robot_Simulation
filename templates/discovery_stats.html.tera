@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Stats</title>
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+<div class="topnav">
+    <a href="/">Actions</a>
+    <a href="/life_stats">Life</a>
+    <a href="/zombies_stats">Zombies</a>
+    <a href="/discovery_stats">Discovery</a>
+</div>
+
+<div class="content">
+    <div><h1>Discovery Stats</h1></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <div id="heatmap">
+    <script>
+        // Define your matrix data (example data)
+        const matrixData = {{position_matrix}};
+
+        // Define the dimensions of the heatmap
+        const width = {{map_dim}};
+        const height = {{map_dim}};
+
+        // Create the SVG element
+        const svg = d3.select("#heatmap")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Create the heatmap using rectangles
+        svg.selectAll("rect")
+            .data(matrixData.flat()) // Flatten the matrix data into a single array
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => (i % matrixData[0].length) * (width / matrixData[0].length)) // Calculate x position
+            .attr("y", (d, i) => Math.floor(i / matrixData[0].length) * (height / matrixData.length)) // Calculate y position
+            .attr("width", width / matrixData[0].length)
+            .attr("height", height / matrixData.length)
+            .style("fill", d => `rgb(${255 - d * 255}, ${255 - d * 255}, ${255 - d*255})`); // Color based on data density
+
+    </script>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Trend</title>
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+<div class="topnav">
+    <a href="/">Actions</a>
+    <a href="/life_stats">Life</a>
+    <a href="/zombies_stats">Zombies</a>
+    <a href="/discovery_stats">Discovery</a>
+</div>
+
+<div class="content">
+    <div><h1>Life Trend</h1></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <canvas id="myChart" style="flex: 1;  object-fit: contain; align-self: center; "></canvas>
+    <script>
+        let data ={{energy_vector}};
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: Array.from({length: data.length}, (_, i) => i + 1),
+                datasets: [{
+                    data: {{energy_vector}},
+                    borderColor: "red",
+                    fill: false,
+                    label: "Energy"
+                }, {
+                    data: {{thirst_vector}},
+                    borderColor: "green",
+                    fill: false,
+                    label: "Thirst"
+                }, {
+                    data: {{hunger_vector}},
+                    borderColor: "blue",
+                    fill: false,
+                    label: "Hunger"
+                }]
+            },
+            options: {
+                legend: {display: true},
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

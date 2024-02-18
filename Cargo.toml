@@ -1,0 +1,22 @@
+[package]
+name = "IamLegend"
+version = "0.1.0"
+edition = "2021"
+
+
+
+[dependencies]
+robotics_lib = {registry = "kellnr", version = "*"}
+worldgen_unwrap = { registry = "kellnr" , version = "*"}
+tile-resource-mapper-tool =  { registry = "kellnr" , version = "*"}
+rustbeef_nlacompass = {registry = "kellnr", version = "*" }
+ohcrab_weather = { registry = "kellnr" , version = "*"}
+spyglass = { registry = "kellnr" , version = "*"}
+charting_tools = { registry = "kellnr" , version = "*"}
+robo_gui = {git="https://github.com/Do-Not-Panic-Adv/Robo-GUI"}
+lazy_static = "1.4.0"
+winapi = { version = "0.3.9", features = ["winuser"] }
+rocket = "0.5.0-rc.1"
+rocket_dyn_templates = {version = "0.1.0-rc.4", features = ["tera"]}
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
+rand = "0.8.5"
