@@ -1,5 +1,5 @@
 [package]
-name = "IamLegend"
+name = "i_am_legend"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,6 +12,7 @@ tile-resource-mapper-tool =  { registry = "kellnr" , version = "*"}
 rustbeef_nlacompass = {registry = "kellnr", version = "*" }
 ohcrab_weather = { registry = "kellnr" , version = "*"}
 spyglass = { registry = "kellnr" , version = "*"}
+oxagaudiotool = { registry = "kellnr" , version = "*"}
 charting_tools = { registry = "kellnr" , version = "*"}
 robo_gui = {git="https://github.com/Do-Not-Panic-Adv/Robo-GUI"}
 lazy_static = "1.4.0"

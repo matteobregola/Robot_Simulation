@@ -10,9 +10,11 @@ pub(crate) mod structs {
     use robo_gui::MainState;
     use robotics_lib::interface::*;
     use robotics_lib::runner::Robot;
-    use robotics_lib::world::*;
-    use robotics_lib::world::tile::{Content, Tile};
+    use robotics_lib::world::tile::Content;
     use rustbeef_nlacompass::compass::NLACompass;
+    use oxagaudiotool::{OxAgAudioTool};
+    use oxagaudiotool::sound_config::OxAgSoundConfig;
+
 
     #[derive(Debug, Clone, PartialEq, Eq)]
     pub(crate) struct DiscoverInfo {
@@ -62,7 +64,7 @@ pub(crate) mod structs {
 
     impl Display for RobertStatus {
         fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-            let mut s = format!("Robert Status: [hunger = {}, thirst={}]", self.hunger, self.thirst);
+            let s = format!("Robert Status: [hunger = {}, thirst={}]", self.hunger, self.thirst);
             write!(f, "{}", s)
         }
     }
@@ -120,10 +122,12 @@ pub(crate) mod structs {
         pub mapper_tool: TileMapper,
         pub weather_tool: WeatherPredictionTool,
         pub nla_compass_tool: NLACompass,
+        pub audio_tool: Option<OxAgAudioTool>,
+        pub sound: Vec<OxAgSoundConfig>,
         pub tick_number: u64, // #GUI
         pub gui: MainState<'a>, // #GUI
         pub last_coords: Option<(usize, usize)>, // #GUI
-        pub run: Rc<RefCell<bool>>,
+        pub run: Rc<RefCell<bool>>, // ROCKET
     }
 
     #[derive(Debug, Clone)]

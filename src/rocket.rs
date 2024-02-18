@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use rocket_dyn_templates::{context, Template};
+use rocket_dyn_templates::{Template};
 use rocket::{launch, get, routes, State};
 use rocket::fs::FileServer;
 use crate::structs::structs::RocketData;
@@ -40,7 +40,8 @@ fn zombies_stats(state: &State<RocketData>) -> Template {
     Template::render("zombies_stats", &context)
 }
 
-
+// actually the code is used, but the compiler doesn't understand it
+#[allow(dead_code,unused)]
 #[launch]
 pub fn rocket() ->_ {
     rocket::build()

@@ -1,7 +1,6 @@
 pub(crate) mod errors {
     #[derive(Debug)]
     pub(crate) enum Error{
-        NothingToDrink,
         CollectError,
         LogicError,
     }

@@ -1,7 +1,7 @@
 pub(crate) mod utiliies {
     use std::collections::HashSet;
     use rand::thread_rng;
-    use robotics_lib::interface::{Direction, robot_map, robot_view};
+    use robotics_lib::interface::{Direction, robot_map};
     use robotics_lib::world::tile::{Content, Tile};
     use robotics_lib::world::World;
     use crate::RobertNeville;
@@ -121,7 +121,7 @@ pub(crate) mod utiliies {
             }
         }
         else {
-            let mut map = robot_map(world).unwrap();
+            let map = robot_map(world).unwrap();
             for (index_i, i) in map.iter().enumerate() {
                 for (index_j, j) in i.iter().enumerate() {
                     match j {
@@ -139,21 +139,6 @@ pub(crate) mod utiliies {
         }
     }
 
-    pub(crate) fn get_quantity(c: &Content) -> usize {
-        match c {
-            | Content::Rock(x)
-            | Content::Tree(x)
-            | Content::Garbage(x)
-            | Content::Coin(x)
-            | Content::Water(x)
-            | Content::Market(x)
-            | Content::JollyBlock(x)
-            | Content::Bush(x)
-            | Content::Fish(x) => *x,
-            | Content::Bin(x) | Content::Crate(x) | Content::Bank(x) => 0,
-            | Content::Fire | Content::Building | Content::Scarecrow | Content::None => 0,
-        }
-    }
 
     pub(crate) fn find_most_unvisited_zone(map: &Vec<Vec<Option<Tile>>>) -> (usize, usize) {
 
@@ -223,7 +208,7 @@ pub(crate) mod utiliies {
 
     pub(crate) fn map_converter_normal(mut old_map: Vec<Vec<Option<Tile>>>, positions:&HashSet<(usize,usize)>) -> Vec<Vec<Option<Tile>>> {
         // as the previous but removes also the tiles around it so it's suggested in other mods,
-        // especially when the energy is high and he is f hungry
+        // especially when the energy is high and he is not hungry/thirsty
 
         let offsets:[(i32,i32);8] = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)];
 
@@ -244,7 +229,7 @@ pub(crate) mod utiliies {
         old_map
     }
 
-    pub(crate) fn check_cannot_go(robert:& RobertNeville, world: &World, dir:&Direction)-> (bool, Option<(usize,usize)>) {
+    pub(crate) fn check_cannot_go(robert:& RobertNeville, _world: &World, dir:&Direction)-> (bool, Option<(usize,usize)>) {
         // check if it can go in that direction or if there is a zombie. return true if cannot go
         // and where is it
         let rob_x=robert.robot.coordinate.get_row();
@@ -316,6 +301,26 @@ pub(crate) mod utiliies {
         }
     }
 
+    // Debug Purpose
+    #[allow(dead_code)]
+    pub(crate) fn get_quantity(c: &Content) -> usize {
+        match c {
+            | Content::Rock(x)
+            | Content::Tree(x)
+            | Content::Garbage(x)
+            | Content::Coin(x)
+            | Content::Water(x)
+            | Content::Market(x)
+            | Content::JollyBlock(x)
+            | Content::Bush(x)
+            | Content::Fish(x) => *x,
+            | Content::Bin(_) | Content::Crate(_) | Content::Bank(_) => 0,
+            | Content::Fire | Content::Building | Content::Scarecrow | Content::None => 0,
+        }
+    }
+
+    // Debug Purpose
+    #[allow(dead_code)]
     pub(crate) fn print_map(map: Option<Vec<Vec<Option<Tile>>>>, size: (usize, usize)) {
         println!("---------ROBOT_MAP------------");
         for i in 0..10 {
@@ -347,7 +352,6 @@ pub(crate) mod utiliies {
             }
 
             println!("");
-            x = 0;
             y += 1;
         }
         println!("\n-----------------------------------");

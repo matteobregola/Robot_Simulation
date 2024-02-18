@@ -3,26 +3,6 @@
 version = 3
 
 [[package]]
-name = "IamLegend"
-version = "0.1.0"
-dependencies = [
- "charting_tools",
- "lazy_static",
- "ohcrab_weather",
- "rand 0.8.5",
- "robo_gui",
- "robotics_lib",
- "rocket",
- "rocket_dyn_templates",
- "rustbeef_nlacompass",
- "spyglass",
- "tile-resource-mapper-tool",
- "tokio",
- "winapi",
- "worldgen_unwrap",
-]
-
-[[package]]
 name = "ab_glyph"
 version = "0.2.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2083,6 +2063,27 @@ dependencies = [
  "tower-service",
  "tracing",
  "want",
+]
+
+[[package]]
+name = "i_am_legend"
+version = "0.1.0"
+dependencies = [
+ "charting_tools",
+ "lazy_static",
+ "ohcrab_weather",
+ "oxagaudiotool",
+ "rand 0.8.5",
+ "robo_gui",
+ "robotics_lib",
+ "rocket",
+ "rocket_dyn_templates",
+ "rustbeef_nlacompass",
+ "spyglass",
+ "tile-resource-mapper-tool",
+ "tokio",
+ "winapi",
+ "worldgen_unwrap",
 ]
 
 [[package]]

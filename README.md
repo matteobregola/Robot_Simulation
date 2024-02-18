@@ -1,7 +1,7 @@
 
 # I am Legend
 
-
+![Alt text](IamLegend.jpg "I am Legend")
 
 
 ## Inspiration and Actions

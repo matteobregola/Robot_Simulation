@@ -5,27 +5,24 @@ mod structs;
 mod rocket;
 
 
-use std::error::Error;
-use std::fmt::{Display, Pointer};
-use std::ops::Deref;
 use std::path::PathBuf;
-use std::{env, thread};
+use std::{env};
 use std::rc::Rc;
 use std::cell::RefCell;
-use std::time::Duration;
+use std::collections::HashMap;
 use another_one_bytes_the_dust_tile_resource_mapper_tool::tool::tile_mapper::TileMapper;
 use ohcrab_weather::weather_tool::{WeatherPredictionTool};
-use rand::{Rng, thread_rng};
+use rand::{thread_rng};
 use robo_gui::MainState;
-use robotics_lib::runner::{Robot, Runnable, Runner};
-use robotics_lib::world::world_generator::Generator;
+use robotics_lib::runner::{Robot, Runner};
 use worldgen_unwrap::public::WorldgeneratorUnwrap;
 use structs::structs::*;
 use std::sync::Mutex;
 use lazy_static::lazy_static;
 use rustbeef_nlacompass::compass::NLACompass;
 use rocket::rocket;
-
+use oxagaudiotool::OxAgAudioTool;
+use oxagaudiotool::sound_config::OxAgSoundConfig;
 
 // note: color output are shown if the IDE is set to do so
 
@@ -57,18 +54,38 @@ async fn main(){
         }
     }
 
+    let audio_tool =
+        OxAgAudioTool::new(HashMap::new(), HashMap::new(),
+                           HashMap::new());
+
+    let audio_result;
+
+    match audio_tool {
+        Ok(a) => {
+            audio_result=Some(a);
+        }
+        Err(_) => {
+            audio_result=None;
+        }
+    }
+
+    let sounds= vec![OxAgSoundConfig::new("assets/zombie-growl.mp3")];
+
     // robot creation
-    let mut robot = RobertNeville {
+    let robot = RobertNeville {
         robot: Robot::new(),
         status: RobertStatus::new(),
         knowledge: RobertKnowledge::new(),
         mapper_tool: TileMapper {},
         weather_tool: WeatherPredictionTool::new(),
         nla_compass_tool: NLACompass::new(),
+        audio_tool: audio_result,
+        sound: sounds,
         tick_number:0,
         gui: MainState::new(1).unwrap(), // #GUI
         last_coords: None, //  #GUI
         run: Rc::new(RefCell::new(true)),
+
     };
 
     let cont = Rc::clone(&robot.run);
@@ -88,7 +105,7 @@ async fn main(){
         },
         Err(e) => println!("Error:{:?}", e),
     }
-    let mut rocket_data = ROCKET_DATA.lock().unwrap();
+    let rocket_data = ROCKET_DATA.lock().unwrap();
     let rocket = rocket().manage(rocket_data.clone());
     let _ = rocket.launch().await;
 }
