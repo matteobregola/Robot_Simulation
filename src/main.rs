@@ -24,22 +24,24 @@ use rocket::rocket;
 use oxagaudiotool::OxAgAudioTool;
 use oxagaudiotool::sound_config::OxAgSoundConfig;
 
-// note: color output are shown if the IDE is set to do so
+// note:  Color output will be displayed if the IDE is configured accordingly.
 
-// NB: The "nla" tool has sometimes a strange behaviour causing the robot to move back and forth
-// The tool usage is inserted in the get_dir() function. To show the expected behaviour it
-// it substituted with charting_tools (our group tool) in the same logic. If the user
-// wants to try the behaviour with it it can run the following command:
+// NB: The "NLA" tool occasionally exhibits erratic behavior, leading to the robot moving back and forth.
+// This tool's usage is integrated into the get_dir() function. To demonstrate the expected behavior,
+// it is replaced with charting_tools (our group tool) using the same logic. To experiment with
+// this tool, users can execute the following command:
 // cargo run switch_tool
+// the code then uses a global variable to decide which one to use
 
-// The other one is used because i need to save somewhere the data, i can't save them in the
-// robot because ownership is passed to the runner
+
+// The additional global variable is necessary for storing the rocket's data  as I cannot retain it within the robot
+// due to ownership being transferred to the runner (I wouldn't be able to access it after the run loop).
 lazy_static! {
     pub static ref SWITCH_TOOL: Mutex<bool> = Mutex::new(false);
     pub static ref ROCKET_DATA: Mutex<RocketData> = Mutex::new(RocketData::new());
 }
 
-
+// tokio is used as async runtime for rocket
 #[tokio::main]
 async fn main(){
 
@@ -89,8 +91,10 @@ async fn main(){
     };
 
     let cont = Rc::clone(&robot.run);
-    // Map loading
-    let mut w=WorldgeneratorUnwrap::init(false,  Some(PathBuf::from("maps/world_map")));
+
+    // TOOL 1
+    // There are two already generated maps: "world_map_small" and "world_map"
+    let mut w=WorldgeneratorUnwrap::init(false,  Some(PathBuf::from("maps/world_map_small")));
 
     let mut run = Runner::new(Box::new(robot), &mut w);
     match run {

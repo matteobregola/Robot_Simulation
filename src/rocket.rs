@@ -40,7 +40,7 @@ fn zombies_stats(state: &State<RocketData>) -> Template {
     Template::render("zombies_stats", &context)
 }
 
-// actually the code is used, but the compiler doesn't understand it
+// the code is used, but the compiler doesn't understand it
 #[allow(dead_code,unused)]
 #[launch]
 pub fn rocket() ->_ {

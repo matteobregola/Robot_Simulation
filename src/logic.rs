@@ -8,7 +8,7 @@ pub(crate) mod logic {
     use rustbeef_nlacompass::compass::Destination;
     use robotics_lib::world::World;
     use robotics_lib::interface::*;
-    use robotics_lib::world::tile::Content;
+    use robotics_lib::world::tile::{Content};
     use robotics_lib::runner::Runnable;
     use robotics_lib::utils::LibError;
     use robotics_lib::event::events::Event;
@@ -34,12 +34,15 @@ pub(crate) mod logic {
                 self.gui.update_world(robot_map(world).unwrap());
                 let _ = self.gui.tick();
                 let dim =robot_map(world).unwrap().len();
+
+                // rocket data  initialization
                 let mut rocket_data = ROCKET_DATA.lock().unwrap();
                 rocket_data.heatmap = vec![vec![0; dim]; dim];
                 rocket_data.map_dim = dim;
             }
 
-            if self.tick_number <= 30 {
+            if self.tick_number <= 20 {
+                // Just for having more time to understand what is happening
                 thread::sleep(Duration::from_secs_f32(1.0));
             }
 
@@ -53,7 +56,7 @@ pub(crate) mod logic {
             let robot_x= self.robot.coordinate.get_row();
             let robot_y = self.robot.coordinate.get_col();
 
-            let mut rocket_data:MutexGuard<RocketData> = ROCKET_DATA.lock().unwrap();
+            let mut rocket_data:MutexGuard<RocketData> = ROCKET_DATA.lock().unwrap(); // Rocket data update
             rocket_data.energy_vector.push(energy);
             rocket_data.hunger_vector.push(hunger);
             rocket_data.thirst_vector.push(thirst);
@@ -105,9 +108,6 @@ pub(crate) mod logic {
 
                     match walk_result {
                         Ok(_) => {
-                            // print!("\x1b[32m");
-                            // println!("{}", "moved");
-                            // print!("\x1b[0m");
                             self.status.previous_action = Action::WalkDiscover(dir.clone(), 0);
                             update_knowledge(self, world, true); //the go function update the knowledge
                             // about the world but i also need to update the knowledge of robert
@@ -121,7 +121,7 @@ pub(crate) mod logic {
                                 match &mut self.audio_tool {
                                     None => {}
                                     Some(audio) => {
-                                        let _ =audio.play_audio(&self.sound[0]);
+                                        let _ =audio.play_audio(&self.sound[0]); // TOOL %
                                     }
                                 }
                                 self.status.previous_action = Action::ESCAPE(None, zombie_found.2, zombie_found.1.unwrap());
@@ -144,7 +144,7 @@ pub(crate) mod logic {
                         // sends also the dog
                         let robert_row = self.robot.coordinate.get_row();
                         let robert_col = self.robot.coordinate.get_col();
-                        // TOOL 4:
+                        // TOOL 3:
                         let mut spyglass = Spyglass::new(
                             robert_row, // center_row
                             robert_col, // center_col
@@ -178,7 +178,7 @@ pub(crate) mod logic {
                     let robert_row = self.robot.coordinate.get_row();
                     let robert_col = self.robot.coordinate.get_col();
 
-                    // TOOL 4:
+                    // TOOL 3:
                     let mut spyglass = Spyglass::new(
                         robert_row, // center_row
                         robert_col, // center_col
@@ -283,7 +283,7 @@ pub(crate) mod logic {
                                 match &mut self.audio_tool {
                                     None => {}
                                     Some(audio) => {
-                                       let _ = audio.play_audio(&self.sound[0]);
+                                       let _ = audio.play_audio(&self.sound[0]); // TOOL 5
                                     }
                                 }
                                 self.status.previous_action = Action::ESCAPE(None, zombie_found.2, zombie_found.1.unwrap());
@@ -323,7 +323,7 @@ pub(crate) mod logic {
                                 match &mut self.audio_tool {
                                     None => {}
                                     Some(audio) => {
-                                        let _ = audio.play_audio(&self.sound[0]);
+                                        let _ = audio.play_audio(&self.sound[0]); // TOOL 5
                                     }
                                 }
                                 self.status.previous_action = Action::ESCAPE(None, zombie_found.2, zombie_found.1.unwrap());
@@ -376,7 +376,6 @@ pub(crate) mod logic {
             }
         }
         fn handle_event(&mut self, event: Event) {
-            // #GUI
 
             match event {
                 Event::Ready => {
@@ -460,8 +459,9 @@ pub(crate) mod logic {
                         } else {
                             //  find a tile that contains a Building
 
+                            // TOOL 2
                             let target = robert.mapper_tool.find_closest(
-                                &world, robert, Content::Building); //TOOL1;
+                                &world, robert, Content::Building);
                             match target {
                                 Ok(t) => {
                                     // BUILDING FOUND
@@ -510,10 +510,6 @@ pub(crate) mod logic {
         }
 
         if thirst || hunger {
-            // print!("\x1b[31m");
-            // println!("I need to drink or eat");
-            // print!("\x1b[0m");
-
             match &previous_action {
                 Action::WalkToTarget(_, target, content) => {
                     let direction = get_dir(world, robert, &target, None, false, false).unwrap();
@@ -549,7 +545,7 @@ pub(crate) mod logic {
                         println!("Robert Needs to drink");
                         print!("\x1b[0m")
                     }
-                    // TOOL 1: The resource mapper
+                    // TOOL 2
                     let result = robert.mapper_tool.find_closest(&world, robert, content.clone());
 
                     match result {
@@ -604,6 +600,7 @@ pub(crate) mod logic {
             }
 
             if !high_energy {
+                // TOOL 4
                 let prediction = robert.weather_tool.predict(1); // TOOL 4
                 match prediction {
                     Ok(p) => {
@@ -635,7 +632,6 @@ pub(crate) mod logic {
 
                     // Situation: robert has high energy, and it's the "first"
                     // high energy operation. He will try to reach a new zone
-
                     let map = map_converter_normal(robot_map(world).unwrap(), &robert.knowledge.zombies);
 
                     let directions;
@@ -647,6 +643,22 @@ pub(crate) mod logic {
 
                     let mut direction1=directions.0.0;
                     let mut direction2=directions.0.1;
+
+                    // if he has a robot on the right and he is in a building he should fo left
+                    let robert_x = robert.robot.coordinate.get_row();
+                    let robert_y = robert.robot.coordinate.get_col();
+                    let original_map=robot_map(world).unwrap();
+                    let tile= &original_map[robert_x][robert_y];
+                    match tile{
+                        None => {}
+                        Some(t) => {
+                            if t.content == Content::Building{
+                                let dir=find_building_exit(&robert, &world);
+                                direction1=dir.clone();
+                                direction2=dir;
+                            }
+                        }
+                    }
 
 
                     while check_cannot_go(robert, world,&direction1).0 || check_cannot_go(robert, world,&direction2).0{
@@ -670,7 +682,7 @@ pub(crate) mod logic {
                         return Action::WalkDiscover((directions.0.0.clone(), directions.0.1.clone()), steps);
                     }
                     else{
-                        // is stacked somewhere, eval a random direction
+                        // is stuck somewhere, eval a random direction
                         let mut direction1=generate_random_direction();
                         let mut direction2=generate_random_direction();
                         while check_cannot_go(robert, world,&direction1).0 || check_cannot_go(robert, world,&direction2).0{
@@ -783,6 +795,7 @@ pub(crate) mod logic {
                 }
             }
         } else {
+            // TOOL 6
             robert.nla_compass_tool.set_destination(Destination::Coordinate((target.0, target.1)));
             let nla_result = robert.nla_compass_tool.get_move(
                 &escape_map,

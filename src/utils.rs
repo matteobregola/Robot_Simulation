@@ -1,7 +1,7 @@
 pub(crate) mod utiliies {
     use std::collections::HashSet;
     use rand::thread_rng;
-    use robotics_lib::interface::{Direction, robot_map};
+    use robotics_lib::interface::{Direction, robot_map, robot_view};
     use robotics_lib::world::tile::{Content, Tile};
     use robotics_lib::world::World;
     use crate::RobertNeville;
@@ -201,7 +201,6 @@ pub(crate) mod utiliies {
 
         for zombie_position in positions.iter(){
             old_map[zombie_position.0][zombie_position.1]=None;
-           // println!("--------------A)I have modified this: [{},{}]",zombie_position.0, zombie_position.1);
         }
         old_map
     }
@@ -221,7 +220,6 @@ pub(crate) mod utiliies {
                     if neighbour_y>=0 && neighbour_y < old_map[neighbour_x as usize].len() as i32{
 
                         old_map[neighbour_x as usize][neighbour_y as usize]=None;
-                       // println!("--------------B) I have modified this: [{},{}]",neighbour_x, neighbour_y);
                     }
                 }
             }
@@ -278,6 +276,45 @@ pub(crate) mod utiliies {
                 }
             }
         }
+    }
+
+    pub(crate) fn find_building_exit(robert: &RobertNeville, world: &World)->Direction{
+        let around = robot_view(robert, world);
+
+        match &around[0][1] {
+            None => {}
+            Some(t) => {
+                if t.content == Content::Scarecrow{
+                    return Direction::Down;
+                }
+            }
+        }
+        match &around[1][0] {
+            None => {}
+            Some(t) => {
+                if t.content == Content::Scarecrow{
+                    return Direction::Right;
+                }
+            }
+        }
+        match &around[1][2] {
+            None => {}
+            Some(t) => {
+                if t.content == Content::Scarecrow{
+                    return Direction::Left;
+                }
+            }
+        }
+        match &around[2][1] {
+            None => {}
+            Some(t) => {
+                if t.content == Content::Scarecrow{
+                    return Direction::Up;
+                }
+            }
+        }
+
+        return Direction::Right;
     }
 
     pub(crate) fn generate_random_direction()-> Direction{
