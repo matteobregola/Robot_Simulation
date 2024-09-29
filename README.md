@@ -8,8 +8,8 @@
 The tool simulates the life of Robert and his dog Sam in the film *I am legend*.
 Robert has the objective to survive by collecting items from **markets** and drinking **water**.
 The problem is that the map is full of **zombies** *(scarecrow)*! If he sees a zombie he needs to escape into a **shelter** *(building)*.
-He can maybe survive from the zombies, but certainly he would die if he runs out of food or water, and obviously in this case the AI would stop.
-Fortunately Sam can help him discover the world with him.
+He can maybe survive from the zombies, but certainly he would die if he runs out of food or water, and obviously in this case the AI would stops.
+Fortunately Sam can help him discover the world.
 
 ## Tools used
 - **World generator**
@@ -24,3 +24,9 @@ Fortunately Sam can help him discover the world with him.
 Rocket framework with templates has been used to have a report of the actions performed by the robot. The server is **automatically launched if robert dies** or can be launched by **pressing the "X" on the GUI** (The window can have some bug, just press it once and leave it as it is even if it doesn't close).
 Then to access the server go to:
 http://127.0.0.1:8000
+
+## GUI Info
+The gui needs some files in order to run on Windows. If the Gui doesn't work:
+- access to the gui_files directory
+- copy the files with the extension "dll" into the main folder of the project, 
+- copy the ".lib" files in the following directory: C:\Users\{name}\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib.
